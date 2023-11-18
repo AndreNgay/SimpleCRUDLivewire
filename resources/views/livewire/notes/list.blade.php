@@ -31,6 +31,12 @@ new class extends Component
         $this->dispatch('note-updated'); 
     }
 
+    public function delete($id) {
+        $note = Note::where('id' , $id)->first();
+        $note->delete();
+        $this->dispatch('note-updated'); 
+    }
+
     #[On('note-updated')]
     public function getNotes(): void
     {
@@ -52,10 +58,13 @@ new class extends Component
                 <button type="button" wire:click="edit({{ $note->id }})" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal{{ $note->id }}" >
                     Edit
                 </button>
-                <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal{{ $note->id }}" >
+                    Delete
+                </button>
             </div>
         </div>
     </div>
     @include('livewire.notes.edit-modal')
+    @include('livewire.notes.delete-confirmation-modal')
     @endforeach
 </div>
